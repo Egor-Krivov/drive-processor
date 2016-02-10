@@ -1,24 +1,10 @@
-import pyinotify
-
 from processor import process
+from monitor import monitor_folder
+import datetime
 
+if __name__ == '__main__':
+    raw_path = '/media/data/Dropbox/raw'
+    processed_path = '/media/data/Dropbox/processed'
 
-class EventHandler(pyinotify.ProcessEvent):
-    def process_IN_CREATE(self, event):
-        print("Creating:", event.pathname)
-
-    def process_IN_DELETE(self, event):
-        print("Removing:", event.pathname)
-
-    def process_IN_MOVED_TO(self, event):
-        print("Moved to:", event)
-
-
-wm = pyinotify.WatchManager()  # Watch Manager
-mask = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MOVED_TO
-
-handler = EventHandler()
-notifier = pyinotify.Notifier(wm, handler)
-wdd = wm.add_watch('/media/data/Dropbox/test', mask, rec=True, auto_add=True)
-
-notifier.loop()
+    with open('log_' + str(datetime.datetime.now()), 'w') as logfile:
+        monitor_folder(raw_path, processed_path, process, logfile)
