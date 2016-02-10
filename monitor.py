@@ -43,6 +43,7 @@ class EventHandler(pyinotify.ProcessEvent):
         log = self.__log
         log('file {} was deleted'.format(path))
 
+
 def monitor_folder(raw_path: str, processed_path: str, process: callable,
                   logfile: object=sys.stdout):
     """Monitor 'raw_path' for new files. Each of new files are processed with
